@@ -1,0 +1,56 @@
+.network-status {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+}
+
+.offline-banner {
+  background-color: #ff4757;
+  color: white;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  /* 初始状态 - 完全透明 */
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* 显示状态 - 淡入 */
+.offline-banner.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 隐藏状态 - 淡出 */
+.offline-banner.fade-out {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.icon {
+  font-size: 18px;
+}
+
+.message {
+  font-size: 14px;
+}
+
+.retry-button {
+  background-color: white;
+  color: #ff4757;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.retry-button:hover {
+  background-color: #f1f2f6;
+}
