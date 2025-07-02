@@ -1,6 +1,7 @@
 .experimentHome {
   padding: 2rem;
   color: red;
+
   h1 {
     color: #1e40af;
     text-align: center;
@@ -13,8 +14,8 @@
     display: inline-block;
     text-shadow: 2px 2px 4px rgba(30, 64, 175, 0.3);
   }
-  
-  h1::after{
+
+  h1::after {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -28,6 +29,7 @@
     margin-bottom: 3rem;
     border-radius: 12px;
     overflow: hidden;
+    height: 535px;
     box-shadow: 0 4px 20px rgba(30, 64, 175, 0.1);
   }
 
@@ -37,6 +39,7 @@
     color: white;
     position: relative;
     overflow: hidden;
+    height: 500px;
   }
 
   .carousel-slide::before {
@@ -52,8 +55,8 @@
 
   .slide-content {
     display: flex;
-    height: 100%;
-    padding: 3rem 4rem;
+    height: 500px;
+    padding: 0 4rem;
     position: relative;
     z-index: 1;
     gap: 4rem;
@@ -74,6 +77,24 @@
     margin-bottom: 1.5rem;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
+
+
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 10px;
+
+    >div {
+      color: #3b82f6;
+      border-bottom: 1px solid transparent;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    >div:hover {
+      border-color: #3b82f6;
+    }
   }
 
   .slide-badge i {
@@ -86,7 +107,10 @@
     color: white;
     font-weight: 500;
     font-size: 1rem;
+
+
   }
+
 
   .slide-text h2 {
     font-size: 3rem;
@@ -318,6 +342,8 @@
 
   .strategy-options {
     margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
   }
 
   .el-radio-group {
@@ -343,6 +369,8 @@
   .radio-content {
     display: flex;
     align-items: center;
+    height: 80px;
+    width: 100%;
     gap: 12px;
   }
 
@@ -887,4 +915,3 @@
 
 
 }
-

@@ -1,5 +1,5 @@
 
-import styles from './PerformanceFeatures.module.css';
+import styles from './PerformanceFeatures.less';
 import classNames from 'classnames';
 
 const PerformanceFeatures = () => {

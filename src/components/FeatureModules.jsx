@@ -1,4 +1,4 @@
-import styles from './FeatureModules.module.css';
+import styles from './FeatureModules.less';
 import classNames from 'classnames';
 
 const FeatureModules = () => {

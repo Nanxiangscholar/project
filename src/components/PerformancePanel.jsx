@@ -3,7 +3,7 @@ import { Tag, Button, message } from 'antd';
 import { 
   DataAnalysisOutlined 
 } from '@ant-design/icons';
-import styles from './PerformancePanel.module.css';
+import styles from './PerformancePanel.less';
 
 /**
  * PerformancePanelUnified 组件

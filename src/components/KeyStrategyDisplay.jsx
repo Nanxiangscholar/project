@@ -5,7 +5,7 @@ import {
   LinkOutlined, 
   CloseOutlined 
 } from '@ant-design/icons';
-import styles from './KeyStrategyDisplay.module.css';
+import styles from './KeyStrategyDisplay.less';
 
 /**
  * KeyStrategyDisplay 组件

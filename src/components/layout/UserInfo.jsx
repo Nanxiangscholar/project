@@ -1,6 +1,6 @@
 import { Dropdown, Menu } from 'antd';
 import { UserOutlined, StarOutlined, ClockCircleOutlined, SettingOutlined } from '@ant-design/icons';
-import styles from './UserInfo.module.css';
+import styles from './UserInfo.less';
 
 const UserInfo = ({ userInfo, onLogout }) => {
   const formatLoginTime = () => {

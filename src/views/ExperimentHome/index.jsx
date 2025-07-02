@@ -21,7 +21,7 @@ import {
   BarChartOutlined,
   MenuOutlined,
   ThunderboltOutlined,
-  QuestionOutlined,
+  QuestionCircleOutlined,
   KeyOutlined,
   SortAscendingOutlined,
   CloseOutlined,
@@ -111,159 +111,154 @@ const ExperimentHome = () => {
   return (
     <div className={styles['experimentHome']}>
       <h1 >图书馆电商管理系统</h1>
+      {/* 切换 */}
       <div className={styles['carousel-section']}>
         <Carousel
           autoplay
           dotPosition="bottom"
           effect="fade"
-          className="system-carousel"
+          arrow={true}
         >
-          <div>
-            <div className={classNames(styles['carousel-slide'], styles['slide-overview'])}>
-              <div className={styles["slide-content"]}>
-                <div className={styles["slide-text"]}>
-                  <div className={styles["slide-badge"]}>
-                    <StarOutlined />
-                    <span>智慧图书馆</span>
+          <div className={classNames(styles['carousel-slide'], styles['slide-overview'])}>
+            <div className={styles["slide-content"]}>
+              <div className={styles["slide-text"]}>
+                <div className={styles["slide-badge"]}>
+                  <StarOutlined />
+                  <span>智慧图书馆</span>
+                </div>
+                <h2>现代化电商管理平台</h2>
+                <div className={styles["slide-features"]}>
+                  <div className={styles["feature-tag"]}>
+                    <ThunderboltOutlined />
+                    <span>高性能架构</span>
                   </div>
-                  <h2>现代化电商管理平台</h2>
-                  <div className={styles["slide-features"]}>
-                    <div className={styles["feature-tag"]}>
-                      <ThunderboltOutlined />
-                      <span>高性能架构</span>
-                    </div>
-                    <div className={styles["feature-tag"]}>
-                      <BarChartOutlined />
-                      <span>大数据支持</span>
-                    </div>
-                    <div className={styles["feature-tag"]}>
-                      <MobileOutlined />
-                      <span>响应式设计</span>
-                    </div>
+                  <div className={styles["feature-tag"]}>
+                    <BarChartOutlined />
+                    <span>大数据支持</span>
+                  </div>
+                  <div className={styles["feature-tag"]}>
+                    <MobileOutlined />
+                    <span>响应式设计</span>
                   </div>
                 </div>
-                <div className={styles["slide-visual"]}>
-                  <div className={classNames(styles["visual-icon"], styles["main-icon"])}>
+              </div>
+              <div className={styles["slide-visual"]}>
+                <div className={classNames(styles["visual-icon"], styles["main-icon"])}>
+                  <BookOutlined />
+                </div>
+                <div className={styles["floating-elements"]}>
+                  <div className={styles["floating-item"]} style={{ '--delay': '0s' }}>
                     <BookOutlined />
                   </div>
-                  <div className={styles["floating-elements"]}>
-                    <div className={styles["floating-item"]} style={{ '--delay': '0s' }}>
-                      <BookOutlined />
-                    </div>
-                    <div className={styles["floating-item"]} style={{ '--delay': '0.5s' }}>
-                      <ShoppingCartOutlined />
-                    </div>
-                    <div className={styles["floating-item"]} style={{ '--delay': '1s' }}>
-                      <BarChartOutlined />
-                    </div>
-                    <div className={styles["floating-item"]} style={{ '--delay': '1.5s' }}>
-                      <MenuOutlined />
-                    </div>
+                  <div className={styles["floating-item"]} style={{ '--delay': '0.5s' }}>
+                    <ShoppingCartOutlined />
+                  </div>
+                  <div className={styles["floating-item"]} style={{ '--delay': '1s' }}>
+                    <BarChartOutlined />
+                  </div>
+                  <div className={styles["floating-item"]} style={{ '--delay': '1.5s' }}>
+                    <MenuOutlined />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div>
-            <div className={classNames(styles["carousel-slide"], styles["slide-features"])}>
-              <div className={styles["slide-content"]}>
-                <div className={styles["slide-text"]}>
-                  <div className={styles["slide-badge"]}>
-                    <SettingOutlined />
-                    <span>核心功能</span>
+          <div className={classNames(styles["carousel-slide"], styles["slide-features"])}>
+            <div className={styles["slide-content"]}>
+              <div className={styles["slide-text"]}>
+                <div className={styles["slide-badge"]}>
+                  <SettingOutlined />
+                  <span>核心功能</span>
+                </div>
+                <h2>四大管理模块</h2>
+                <div className={styles["module-grid"]}>
+                  <div className={styles["module-item"]} onClick={() => navigate('/books')}>
+                    <BookOutlined />
+                    <span>图书目录</span>
                   </div>
-                  <h2>四大管理模块</h2>
-                  <div className={styles["module-grid"]}>
-                    <div className={styles["module-item"]} onClick={() => navigate('/books')}>
-                      <BookOutlined />
-                      <span>图书目录</span>
-                    </div>
-                    <div className={styles["module-item"]} onClick={() => navigate('/dynamic-medium-list')}>
-                      <SyncOutlined />
-                      <span>库存管理</span>
-                    </div>
-                    <div className={styles["module-item"]} onClick={() => navigate('/order-process')}>
-                      <BarChartOutlined />
-                      <span>订单处理</span>
-                    </div>
-                    <div className={styles["module-item"]} onClick={() => navigate('/book-catalog')}>
-                      <MenuOutlined />
-                      <span>分类管理</span>
-                    </div>
+                  <div className={styles["module-item"]} onClick={() => navigate('/dynamic-medium-list')}>
+                    <SyncOutlined />
+                    <span>库存管理</span>
+                  </div>
+                  <div className={styles["module-item"]} onClick={() => navigate('/order-process')}>
+                    <BarChartOutlined />
+                    <span>订单处理</span>
+                  </div>
+                  <div className={styles["module-item"]} onClick={() => navigate('/book-catalog')}>
+                    <MenuOutlined />
+                    <span>分类管理</span>
                   </div>
                 </div>
-                <div className={styles["slide-visual"]}>
-                  <div className={styles["feature-showcase"]}>
-                    {showcaseItems.map((item, index) => (
-                      <div
-                        key={index}
-                        className={styles["showcase-item"]}
-                        style={{ animationDelay: `${index * 0.3}s` }}
-                      >
-                        {item.icon}
-                        <span>{item.name}</span>
-                      </div>
-                    ))}
-                  </div>
+              </div>
+              <div className={styles["slide-visual"]}>
+                <div className={styles["feature-showcase"]}>
+                  {showcaseItems.map((item, index) => (
+                    <div
+                      key={index}
+                      className={styles["showcase-item"]}
+                      style={{ animationDelay: `${index * 0.3}s` }}
+                    >
+                      {item.icon}
+                      <span>{item.name}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
-          <div>
-            <div className={classNames(styles["carousel-slide"], styles["slide-tech"])}>
-              <div className={styles["slide-content"]}>
-                <div className={styles["slide-text"]}>
-                  <div className={styles["slide-badge"]}>
-                    <ThunderboltOutlined />
-                    <span>技术优势</span>
+          <div className={classNames(styles["carousel-slide"], styles["slide-tech"])}>
+            <div className={styles["slide-content"]}>
+              <div className={styles["slide-text"]}>
+                <div className={styles["slide-badge"]}>
+                  <ThunderboltOutlined />
+                  <span>技术优势</span>
+                </div>
+                <h2>React性能优化</h2>
+                <div className={styles["tech-stats"]}>
+                  <div className={styles["stat-item"]}>
+                    <div className={styles["stat-number"]}>3种</div>
+                    <div className={styles["stat-label"]}>Key策略</div>
                   </div>
-                  <h2>React性能优化</h2>
-                  <div className={styles["tech-stats"]}>
-                    <div className={styles["stat-item"]}>
-                      <div className={styles["stat-number"]}>3种</div>
-                      <div className={styles["stat-label"]}>Key策略</div>
-                    </div>
-                    <div className={styles["stat-item"]}>
-                      <div className={styles["stat-number"]}>1000+</div>
-                      <div className={styles["stat-label"]}>并发支持</div>
-                    </div>
-                    <div className={styles["stat-item"]}>
-                      <div className={styles["stat-number"]}>99%</div>
-                      <div className={styles["stat-label"]}>性能优化</div>
-                    </div>
+                  <div className={styles["stat-item"]}>
+                    <div className={styles["stat-number"]}>1000+</div>
+                    <div className={styles["stat-label"]}>并发支持</div>
+                  </div>
+                  <div className={styles["stat-item"]}>
+                    <div className={styles["stat-number"]}>99%</div>
+                    <div className={styles["stat-label"]}>性能优化</div>
                   </div>
                 </div>
-                <div className={styles["slide-visual"]}>
-                  <div className={styles["tech-visual"]}>
-                    <div className={styles["code-window"]}>
-                      <div className={styles["window-header"]}>
-                        <div className={styles["window-dots"]}>
-                          <span></span>
-                          <span></span>
-                          <span></span>
-                        </div>
-                        <span className={styles["window-title"]}>performance.js</span>
+              </div>
+              <div className={styles["slide-visual"]}>
+                <div className={styles["tech-visual"]}>
+                  <div className={styles["code-window"]}>
+                    <div className={styles["window-header"]}>
+                      <div className={styles["window-dots"]}>
+                        <span></span>
+                        <span></span>
+                        <span></span>
                       </div>
-                      <div className={styles["window-content"]}>
-                        <div className={styles["code-line"]}>
-                          <span className={styles["keyword"]}>const</span>
-                          <span className={styles["variable"]}>strategy</span> =
-                          <span className={styles["string"]}>'{currentStrategy}'</span>
-                        </div>
-                        <div className={styles["code-line"]}>
-                          <span className={styles["keyword"]}>if</span>
-                          <span className={styles["bracket"]}>(</span>
-                          <span className={styles["variable"]}>strategy</span>
-                          <span className="operator">===</span>
-                          <span className={styles["string"]}>
-                            'id'
-                          </span>
-                          <span className={styles["bracket"]}>)</span>
-                        </div>
-                        <div className={classNames(styles["code-line"], styles["indent"])}>
-                          <span className={styles["keyword"]}>return</span>
-                          <span className={styles["variable"]}>item.id</span>
-                        </div>
+                      <span className={styles["window-title"]}>performance.js</span>
+                    </div>
+                    <div className={styles["window-content"]}>
+                      <div className={styles["code-line"]}>
+                        <span className={styles["keyword"]}>const</span>
+                        <span className={styles["variable"]}>strategy</span> =
+                        <span className={styles["string"]}>'{currentStrategy}'</span>
+                      </div>
+                      <div className={styles["code-line"]}>
+                        <span className={styles["keyword"]}>if</span>
+                        <span className={styles["bracket"]}>(</span>
+                        <span className={styles["variable"]}>strategy</span>
+                        <span className="operator">===</span>
+                        <span className={styles["string"]}>
+                          'id'
+                        </span>
+                        <span className={styles["bracket"]}>)</span>
+                      </div>
+                      <div className={classNames(styles["code-line"], styles["indent"])}>
+                        <span className={styles["keyword"]}>return</span>
+                        <span className={styles["variable"]}>item.id</span>
                       </div>
                     </div>
                   </div>
@@ -271,59 +266,51 @@ const ExperimentHome = () => {
               </div>
             </div>
           </div>
-          <div>
-            <div className={classNames(styles["carousel-slide"], styles["slide-cta"])}>
-              <div className={styles["slide-content"]}>
-                <div className={styles["slide-text"]}>
-                  <div className={styles["slide-badge"]}>
-                    <TrophyOutlined />
-                    <span>立即体验</span>
+          <div className={classNames(styles["carousel-slide"], styles["slide-cta"])}>
+            <div className={styles["slide-content"]}>
+              <div className={styles["slide-text"]}>
+                <div className={styles["slide-badge"]}>
+                  <TrophyOutlined />
+                  <span>立即体验</span>
+                </div>
+                <h2>开始体验</h2>
+                <div className={styles["cta-buttons"]}>
+                  <div
+                    onClick={() => navigate('/books')}
+                  >
+                    <BookOutlined />
+                    <span>图书目录</span>
                   </div>
-                  <h2>开始体验</h2>
-                  <div className={styles["cta-buttons"]}>
-                    <Button
-                      type="primary"
-                      className="cta-button warning"
-                      onClick={() => navigate('/books')}
-                    >
-                      <BookOutlined />
-                      <span>图书目录</span>
-                    </Button>
-                    <Button
-                      type="primary"
-                      className="cta-button primary"
-                      onClick={() => navigate('/book-catalog')}
-                    >
-                      <MenuOutlined />
-                      <span>分类管理</span>
-                    </Button>
-                    <Button
-                      type="primary"
-                      className="cta-button success"
-                      onClick={() => navigate('/order-process')}
-                    >
-                      <BarChartOutlined />
-                      <span>订单中心</span>
-                    </Button>
+                  <div
+                    onClick={() => navigate('/book-catalog')}
+                  >
+                    <MenuOutlined />
+                    <span>分类管理</span>
+                  </div>
+                  <div
+                    onClick={() => navigate('/order-process')}
+                  >
+                    <BarChartOutlined />
+                    <span>订单中心</span>
                   </div>
                 </div>
-                <div className={styles["slide-visual"]}>
-                  <div className={styles["cta-visual"]}>
-                    <div className={styles["rocket-container"]}>
-                      <div className={styles["rocket"]}>
-                        <TrophyOutlined />
-                      </div>
-                      <div className={styles["stars"]}>
-                        {[...Array(5)].map((_, i) => (
-                          <div
-                            key={i}
-                            className={styles["star"]}
-                            style={{ animationDelay: `${i * 0.2}s` }}
-                          >
-                            ✨
-                          </div>
-                        ))}
-                      </div>
+              </div>
+              <div className={styles["slide-visual"]}>
+                <div className={styles["cta-visual"]}>
+                  <div className={styles["rocket-container"]}>
+                    <div className={styles["rocket"]}>
+                      <TrophyOutlined />
+                    </div>
+                    <div className={styles["stars"]}>
+                      {[...Array(5)].map((_, i) => (
+                        <div
+                          key={i}
+                          className={styles["star"]}
+                          style={{ animationDelay: `${i * 0.2}s` }}
+                        >
+                          ✨
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -340,17 +327,17 @@ const ExperimentHome = () => {
             Key 策略选择
           </h3>
           <Tooltip title="不同的Key策略会影响React列表渲染的性能表现" placement="top">
-            <QuestionOutlined className="help-icon" />
+            <QuestionCircleOutlined style={{ color: '#909399' }} />
           </Tooltip>
         </div>
 
         <div className={styles["strategy-card"]}>
-          <div className={styles["strategy-options"]}>
-            <Radio.Group
-              onChange={handleStrategyChange}
-              value={currentStrategy}
-              className="strategy-radio-group"
-            >
+
+          <Radio.Group
+            onChange={handleStrategyChange}
+            value={currentStrategy}
+          >
+            <div className={styles["strategy-options"]}>
               <Radio value="id">
                 <div className={styles["radio-content"]}>
                   <KeyOutlined />
@@ -378,8 +365,8 @@ const ExperimentHome = () => {
                   </div>
                 </div>
               </Radio>
-            </Radio.Group>
-          </div>
+            </div>
+          </Radio.Group>
 
           <div className={styles["current-strategy"]}>
             <div className={styles["strategy-tag"]}>
