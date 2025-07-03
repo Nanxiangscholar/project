@@ -1,7 +1,7 @@
 import  { useState, useEffect } from 'react';
 import { Tag, Button, message } from 'antd';
 import { 
-  DataAnalysisOutlined 
+  PlusOutlined 
 } from '@ant-design/icons';
 import styles from './PerformancePanel.less';
 
@@ -156,7 +156,7 @@ const PerformancePanelUnified = () => {
     <div className={styles['performance-panel-unified']}>
       <div className={styles['panel-header']}>
         <h3>
-          <DataAnalysisOutlined />
+          <PlusOutlined />
           性能监控面板
           {deviceInfo.isMobile ? (
             <Tag size="small" type="success">移动端</Tag>

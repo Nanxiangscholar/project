@@ -1,0 +1,478 @@
+// 变量定义
+@primary-color: #409EFF;
+@success-color: #52c41a;
+@warning-color: #faad14;
+@error-color: #f5222d;
+@info-color: #1890ff;
+@text-color: #333333;
+@text-secondary: #666666;
+@border-color: #e8e8e8;
+@bg-color: #f5f5f5;
+@card-bg: #ffffff;
+@shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+@transition: all 0.3s ease;
+
+// 主容器
+.dynamic-list-container {
+  padding: 20px;
+  margin-bottom: 100px;
+  background-color: @bg-color;
+  min-height: 100vh;
+}
+
+// 页面头部
+.dynamic-list {
+  padding: 20px;
+  
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: @card-bg;
+    border-radius: 8px;
+    box-shadow: @shadow;
+    
+    .left-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      
+      h2 {
+        margin: 0;
+        color: @text-color;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+    }
+    
+    .right-section {
+      display: flex;
+      gap: 16px;
+    }
+  }
+}
+
+// 描述区域
+.description {
+  margin: 20px 0;
+  
+  .ant-alert {
+    border-radius: 8px;
+  }
+}
+
+// 状态统计
+.status-summary {
+  margin: 20px 0;
+  
+  .status-card {
+    background: @card-bg;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: @shadow;
+    border: 1px solid @border-color;
+    transition: @transition;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .status-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    margin-right: 15px;
+  }
+  
+  .status-info {
+    h3 {
+      margin: 0 0 5px 0;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: @text-color;
+    }
+    
+    p {
+      margin: 0;
+      color: @text-secondary;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// 控制面板
+.control-panel {
+  margin: 20px 0;
+  padding: 20px;
+  background: @card-bg;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  border: 1px solid @border-color;
+  
+  .control-form {
+    .form-item-quick, .form-item-test {
+      margin-bottom: 15px;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    
+    .btn-add, .btn-init, .btn-clear, .btn-key-id, .btn-key-index, .btn-key-none, 
+    .btn-generate, .btn-insert-academic, .btn-delete-academic, .btn-shuffle, 
+    .btn-replace-all, .btn-append, .btn-insert-middle, .btn-update, .btn-auto-test, 
+    .btn-batch-test, .btn-export {
+      margin-right: 8px;
+      transition: @transition;
+      
+      &:hover {
+        transform: translateY(-2px);
+      }
+      
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+// 性能指标
+.performance-metrics {
+  margin: 10px 0;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  
+  .metrics-title {
+    margin: 0 0 10px 0;
+    color: @primary-color;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  
+  .metric-item {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    
+    .metric-label {
+      color: @text-secondary;
+      flex: 1;
+    }
+    
+    .metric-value {
+      flex: 1;
+      text-align: right;
+    }
+    
+    .metric-render-time {
+      color: #e67e22;
+      font-weight: bold;
+    }
+    
+    .metric-dom-created {
+      color: @primary-color;
+    }
+    
+    .metric-dom-reused {
+      color: @success-color;
+    }
+    
+    .metric-dom-destroyed {
+      color: @error-color;
+    }
+    
+    .metric-dom-reuse-rate {
+      color: #909399;
+      font-weight: bold;
+    }
+  }
+}
+
+// 渲染详情
+.render-details {
+  margin-bottom: 12px;
+  color: #e67e22;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+// 学术测试列表
+.academic-test-list {
+  margin: 15px 0;
+  
+  .academic-item {
+    padding: 5px;
+    border: 1px solid #eee;
+    margin: 2px;
+    display: inline-block;
+    border-radius: 4px;
+    transition: @transition;
+    
+    &:hover {
+      background-color: rgba(64, 158, 255, 0.05);
+      border-color: @primary-color;
+    }
+  }
+}
+
+// 图书列表
+.book-list {
+  margin-top: 20px;
+  
+  .list-container {
+    background: @card-bg;
+    border-radius: 12px;
+    border: 1px solid @border-color;
+    overflow: hidden;
+  }
+  
+  .book-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid @border-color;
+    transition: @transition;
+    position: relative;
+    
+    &:hover {
+      background: rgba(64, 158, 255, 0.03);
+      transform: translateX(5px);
+    }
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .book-cover {
+      width: 50px;
+      height: 60px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      margin-right: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+    }
+    
+    .book-info {
+      flex: 1;
+      min-width: 0;
+      
+      .book-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: @text-color;
+        margin-bottom: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      
+      .book-meta {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 5px;
+        
+        .book-author {
+          color: @text-secondary;
+          font-size: 0.9rem;
+        }
+        
+        .book-category {
+          color: @primary-color;
+          font-size: 0.85rem;
+          background: rgba(64, 158, 255, 0.1);
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
+      }
+      
+      .book-details {
+        display: flex;
+        gap: 15px;
+        font-size: 0.8rem;
+        color: @text-secondary;
+        
+        .book-isbn, .book-location {
+          white-space: nowrap;
+        }
+      }
+    }
+    
+    .stock-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 20px;
+      min-width: 80px;
+      
+      .stock-count {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 5px;
+        
+        .stock-label {
+          font-size: 0.8rem;
+          color: @text-secondary;
+        }
+        
+        .stock-value {
+          font-size: 1.2rem;
+          font-weight: bold;
+          min-width: 30px;
+          text-align: center;
+        }
+        
+        .stock-empty {
+          color: @error-color;
+        }
+        
+        .stock-low {
+          color: @warning-color;
+        }
+        
+        .stock-normal {
+          color: @success-color;
+        }
+      }
+    }
+    
+    .book-operations {
+      flex-shrink: 0;
+      
+      .btn-increase, .btn-decrease, .btn-delete-book {
+        transition: @transition;
+        
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+  
+  // 空状态
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: @text-secondary;
+    background: @card-bg;
+    border-radius: 12px;
+    border: 1px solid @border-color;
+    
+    .empty-icon {
+      margin-bottom: 20px;
+      
+      .empty-main-icon {
+        font-size: 4rem;
+        color: #ddd;
+      }
+    }
+    
+    .empty-title {
+      margin: 0 0 10px 0;
+      color: @text-color;
+      font-size: 1.5rem;
+    }
+    
+    .empty-desc {
+      margin: 0 0 20px 0;
+      color: @text-secondary;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .btn-init-stock {
+      transition: @transition;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+      }
+    }
+  }
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .status-summary {
+    .ant-col {
+      margin-bottom: 15px !important;
+      
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+  
+  .status-card {
+    padding: 15px;
+    
+    .status-icon {
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+    }
+    
+    .status-info h3 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .book-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    
+    .book-cover {
+      margin-bottom: 10px;
+    }
+    
+    .book-meta {
+      flex-direction: column;
+      gap: 5px;
+    }
+    
+    .stock-info {
+      margin: 15px 0;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+    
+    .book-operations {
+      width: 100%;
+      text-align: center;
+      margin-top: 15px;
+    }
+  }
+  
+  .control-panel {
+    .ant-form-item {
+      display: block !important;
+      margin-bottom: 15px !important;
+    }
+  }
+}  

@@ -99,6 +99,7 @@ export default function App() {
 
   return (
     <Routes>
+      <Route path="*" element={<Navigate to="/login" replace />} />
       <Route path="/" element={<AppLayout />}>
         <Route index element={<Home />} />
         <Route path="books" element={<BookList />} />
@@ -108,7 +109,6 @@ export default function App() {
         <Route path="order-process" element={<OrderProcess />} />
       </Route>
       <Route path="/login" element={<Login />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

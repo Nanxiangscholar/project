@@ -170,16 +170,16 @@
 }
 
 .login-tips {
+  padding: 5px 10px;
   margin-bottom: 32px;
-}
-
-.login-tips .el-alert {
   border-radius: 12px;
   border: none;
   background: rgba(23, 162, 184, 0.1);
 }
 
-.login-tips .el-alert__description p {
+
+
+.login-tips  p {
   margin: 4px 0;
   font-size: 0.9rem;
 }

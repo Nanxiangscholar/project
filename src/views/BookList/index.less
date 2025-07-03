@@ -1,0 +1,448 @@
+@primary-color: #409EFF;
+@success-color: #67C23A;
+@warning-color: #E6A23C;
+@danger-color: #F56C6C;
+@info-color: #909399;
+@light-bg: #f5f7fa;
+@border-radius: 8px;
+@transition-duration: 0.3s;
+
+.container {
+  padding: 20px;
+  background-color: #fff;
+
+  .header {
+    display: inline-block;
+    position: relative;
+    font-size: 1.75rem;
+    color: #1e293b;
+    font-weight: 600;
+    margin-bottom: 16px;
+   
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, transparent);
+  }
+
+
+.controlPanel {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: @border-radius;
+
+  .controlPanelOptions{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 4px;
+  
+  }
+
+  .renderTimeContainer{
+    padding: 16px;
+    background-color: @light-bg;
+    border-radius: @border-radius;
+    h2{
+      color: rgb(64, 158, 255);
+      margin-top: 0;
+    }
+    .renderTimeBox{
+      >div{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        >span:nth-child(1){
+          color: #909399;
+        }
+        >span:nth-child(2){
+          color:rgb(144, 147, 153);
+          font-weight: bold;
+          font-size: 16px;
+        }
+      }
+    }
+   
+  }
+  
+  .controlButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .controlOptions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
+  .flexItems {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .optionLabel {
+    color: #777;
+  }
+}
+
+.tipBox{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #606266;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all @transition-duration;
+  transform-origin: center;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.btnBlue {
+  @extend .btn;
+  background-color: #409EFF;
+  &:hover {
+    background-color: #308EEF;
+  }
+}
+
+.btnGreen {
+  @extend .btn;
+  background-color: #67C23A;
+  &:hover {
+    background-color: #57B22A;
+  }
+}
+
+.btnPurple {
+  @extend .btn;
+  background-color: #9C27B0;
+  &:hover {
+    background-color: #8C17A0;
+  }
+}
+
+.btnRed {
+  @extend .btn;
+  background-color: #F56C6C;
+  &:hover {
+    background-color: #E55C5C;
+  }
+}
+
+.btnYellow {
+  @extend .btn;
+  background-color: #E6A23C;
+  &:hover {
+    background-color: #D6922C;
+  }
+}
+
+.btnIndigo {
+  @extend .btn;
+  background-color: #6610f2;
+  &:hover {
+    background-color: #5600e2;
+  }
+}
+
+.btnTeal {
+  @extend .btn;
+  background-color: #20c997;
+  &:hover {
+    background-color: #10b987;
+  }
+}
+
+.btnPink {
+  @extend .btn;
+  background-color: #d63384;
+  &:hover {
+    background-color: #c62374;
+  }
+}
+
+.btnOrange {
+  @extend .btn;
+  background-color: #fd7e14;
+  &:hover {
+    background-color: #ed6e04;
+  }
+}
+
+.btnCyan {
+  @extend .btn;
+  background-color: #0dcaf0;
+  &:hover {
+    background-color: #0cc0e0;
+  }
+}
+
+.btnAmber {
+  @extend .btn;
+  background-color: #ffc107;
+  &:hover {
+    background-color: #eeb006;
+  }
+}
+
+.btnEmerald {
+  @extend .btn;
+  background-color: #10b981;
+  &:hover {
+    background-color: #00a971;
+  }
+}
+
+.btnBlueDark {
+  @extend .btn;
+  background-color: #165DFF;
+  &:hover {
+    background-color: #064DEE;
+  }
+}
+
+.btnGreenDark {
+  @extend .btn;
+  background-color: #52C41A;
+  &:hover {
+    background-color: #42B40A;
+  }
+}
+
+.btnRedDark {
+  @extend .btn;
+  background-color: #F5222D;
+  &:hover {
+    background-color: #E5121D;
+  }
+}
+
+.radioLabel {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  
+  .radioInput {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    accent-color: @primary-color;
+  }
+  
+  .radioText {
+    color: #777;
+  }
+}
+
+.renderTime {
+  margin-left: auto;
+  color: #777;
+}
+
+.reuseStats {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  color: rgb(230, 126, 34);
+  font-weight: bold;
+}
+
+.academicTestList {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: @light-bg;
+  border-radius: @border-radius;
+  
+  .testListHeader {
+    color: #333;
+    margin-bottom: 10px;
+  }
+}
+
+.bookList {
+  .listHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    
+    .listTitle {
+      color: #333;
+    }
+    
+    .listCount {
+      color: #777;
+    }
+  }
+}
+
+.overflowContainer {
+   border-radius: @border-radius;
+   padding: 15px;
+   display: flex;
+   flex-wrap: wrap;
+   .item{
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+   }
+}
+
+.table {
+  min-width: 100%;
+  background-color: #fff;
+  border-radius: @border-radius;
+  overflow: hidden;
+  th,td,tr{
+    border: none;
+  }
+  
+  .tableHeader {
+    background-color: #fdf3ec;
+    
+    .tableCell {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+  
+  .tableRow {
+    border-bottom: 1px solid #eee;
+    transition: background-color @transition-duration;
+    
+    &:hover {
+      background-color: #f9f9f9;
+    }
+    
+    .tableCell {
+      padding: 12px;
+    }
+  }
+}
+
+.detailRow {
+  background-color: #f9f9f9;
+  
+  .detailCell {
+    padding: 15px;
+  }
+}
+
+.bookDetail {
+  .detailGrid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+    
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .detailItem {
+    .detailLabel {
+      color: #777;
+    }
+    
+    .detailValue {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+  }
+  
+  .detailDescription {
+    margin-top: 15px;
+    
+    .detailLabel {
+      color: #777;
+    }
+    
+    .detailText {
+      margin-left: 10px;
+      margin-top: 5px;
+      color: #555;
+    }
+  }
+}
+
+.detailBtn {
+  background-color: #409EFF;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all @transition-duration;
+  
+  &:hover {
+    background-color: #308EEF;
+    transform: scale(1.05);
+  }
+}
+
+.statusTag {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: white;
+  display: inline-block;
+}
+
+.statusTagSuccess {
+  @extend .statusTag;
+  background-color: @success-color;
+}
+
+.statusTagWarning {
+  @extend .statusTag;
+  background-color: @warning-color;
+}
+
+.statusTagInfo {
+  @extend .statusTag;
+  background-color: @info-color;
+}
+
+.loading {
+  padding: 20px;
+  font-size: 18px;
+  color: #777;
+}
+
+.error {
+  padding: 20px;
+  font-size: 18px;
+  color: @danger-color;
+}
+}
+
+

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Form, Input, Button, Alert, message } from 'antd';
-import { UserOutlined, LockOutlined, ReadOutlined, LineChartOutlined , StarFilled } from '@ant-design/icons';
+import { Form, Input, Button, Alert, message, Tooltip } from 'antd';
+import { UserOutlined, LockOutlined, ReadOutlined, LineChartOutlined, StarFilled, QuestionCircleOutlined } from '@ant-design/icons';
 import { validateCredentials, setAuthToken, isAuthenticated } from '../../utils/auth';
 import styles from './index.module.css';
 
@@ -34,9 +34,9 @@ const Login = () => {
         if (result.success) {
           // 保存认证令牌
           setAuthToken(result.user);
-          
+
           message.success('登录成功！'); // 显示成功消息
-          
+
           // 延迟跳转，让用户看到成功消息
           setTimeout(() => {
             window.location.href = '/';
@@ -127,24 +127,19 @@ const Login = () => {
           </Form>
 
           <div className={styles["login-tips"]}>
-            <Alert
-              message="演示账号"
-              description={
-                <>
-                  <p><strong>管理员：</strong>admin / 123456</p>
-                  <p><strong>用户：</strong>user / 123456</p>
-                </>
-              }
-              type="info"
-              showIcon
-              closable={false}
-            />
+            <Tooltip title={<>
+              <p><strong>管理员：</strong>admin / 123456</p>
+              <p><strong>用户：</strong>user / 123456</p>
+            </>} placement="top">
+              <QuestionCircleOutlined style={{ color: '#909399' }} />
+              <span style={{paddingLeft:10,color: '#909399'}}>演示账号</span>
+            </Tooltip>
           </div>
 
           <div className={styles["login-footer"]}>
             <div className={styles["system-info"]}>
               <span className={styles["info-item"]}>
-                <LineChartOutlined  />
+                <LineChartOutlined />
                 React
               </span>
               <span className={styles["info-item"]}>

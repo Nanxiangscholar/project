@@ -80,11 +80,11 @@ const ExperimentHome = () => {
 
   const getStrategyIcon = () => {
     const iconMap = {
-      id: <KeyOutlined />,
-      index: <SortAscendingOutlined />,
-      none: <CloseOutlined />
+      id: {icon:<KeyOutlined/>,color:'#1e40af'},
+      index: {icon:<SortAscendingOutlined style={{color:'#fff'}}/>,color:'#67c23a'},
+      none: {icon:<CloseOutlined/>,color:'#909399'}
     };
-    return iconMap[currentStrategy] || <KeyOutlined />;
+    return iconMap[currentStrategy] || iconMap.id;
   };
 
   const getStrategyDescription = () => {
@@ -117,7 +117,6 @@ const ExperimentHome = () => {
           autoplay
           dotPosition="bottom"
           effect="fade"
-          arrow={true}
         >
           <div className={classNames(styles['carousel-slide'], styles['slide-overview'])}>
             <div className={styles["slide-content"]}>
@@ -319,7 +318,6 @@ const ExperimentHome = () => {
           </div>
         </Carousel>
       </div>
-
       <div className={styles["key-strategy-section"]}>
         <div className={styles["section-header"]}>
           <h3>
@@ -332,33 +330,33 @@ const ExperimentHome = () => {
         </div>
 
         <div className={styles["strategy-card"]}>
-
           <Radio.Group
             onChange={handleStrategyChange}
             value={currentStrategy}
+            style={{display:'flex',flexDirection:'column',width:'100%'}}
           >
             <div className={styles["strategy-options"]}>
-              <Radio value="id">
+              <Radio value="id" block>
                 <div className={styles["radio-content"]}>
-                  <KeyOutlined />
+                  <KeyOutlined style={{color:'#409EFF'}}/>
                   <div className={styles["radio-text"]}>
                     <span className={styles["primary-text"]}>使用ID</span>
                     <span className={styles["secondary-text"]}>使用数据的唯一标识作为key</span>
                   </div>
                 </div>
               </Radio>
-              <Radio value="index">
+              <Radio value="index" block>
                 <div className={styles["radio-content"]}>
-                  <SortAscendingOutlined />
+                  <SortAscendingOutlined style={{color:'#409EFF'}}/>
                   <div className={styles["radio-text"]}>
                     <span className={styles["primary-text"]}>使用索引</span>
                     <span className={styles["secondary-text"]}>使用数组索引作为key</span>
                   </div>
                 </div>
               </Radio>
-              <Radio value="none">
+              <Radio value="none" block>
                 <div className={styles["radio-content"]}>
-                  <CloseOutlined />
+                  <CloseOutlined style={{color:'#409EFF'}}/>
                   <div className={styles["radio-text"]}>
                     <span className={styles["primary-text"]}>不使用key</span>
                     <span className={styles["secondary-text"]}>默认模式，可能影响性能</span>
@@ -367,13 +365,13 @@ const ExperimentHome = () => {
               </Radio>
             </div>
           </Radio.Group>
-
-          <div className={styles["current-strategy"]}>
+          <div className={styles["current-strategy"]} style={{marginTop:20}}>
             <div className={styles["strategy-tag"]}>
               <Tag
                 color={getStrategyTagType()}
-                size="medium"
-                icon={getStrategyIcon()}
+                size="large"
+                icon={getStrategyIcon().icon}
+                style={{ backgroundColor: getStrategyIcon().color,color:'#fff' }}
               >
                 {getStrategyText(currentStrategy)}
               </Tag>
@@ -385,7 +383,7 @@ const ExperimentHome = () => {
         </div>
       </div>
       <Row gutter={[16, 16]} className={styles["function-cards"]}>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} lg={12}>
           <Card
             hoverable
             className="function-card"
@@ -410,7 +408,7 @@ const ExperimentHome = () => {
             </ul>
           </Card>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} lg={12}>
           <Card hoverable className="function-card">
             <div className={styles["card-header"]}>
               <div className={styles["card-icon"]}>
@@ -431,7 +429,7 @@ const ExperimentHome = () => {
             </ul>
           </Card>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} lg={12}>
           <Card hoverable className={styles["function-card"]}>
             <div className={styles["card-header"]}>
               <div className={styles["card-icon"]}>
@@ -452,7 +450,7 @@ const ExperimentHome = () => {
             </ul>
           </Card>
         </Col>
-        <Col xs={24} sm={12} lg={6}>
+        <Col xs={24} sm={12} lg={12}>
           <Card hoverable className={styles["function-card"]}>
             <div className={styles["card-header"]}>
               <div className={styles["card-icon"]}>
