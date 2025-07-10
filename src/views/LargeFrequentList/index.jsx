@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useLayoutEffect } from 'react';
 import {
   Table,
   Select,
@@ -35,13 +35,7 @@ const OrderProcessingCenter = () => {
   const [efficiency, setEfficiency] = useState(95);
   const [keyStrategy, setKeyStrategy] = useState('id'); // 新增key策略状态
   const nextId = useRef(1);
-
-  useEffect(() => {
-    generate1000Orders();
-    return () => {
-      if (updateTimer) clearInterval(updateTimer);
-    };
-  }, []);
+  const isInitialMount = useRef(true); 
 
   useEffect(() => {
     updateStats();
@@ -256,16 +250,6 @@ const OrderProcessingCenter = () => {
     }, 0);
   };
 
-  const generate1000Orders = () => {
-    const start = performance.now();
-    const newData = Array.from({ length: 1000 }, (_, idx) => generateMockOrder(idx));
-    setDisplayData(newData);
-    setTimeout(() => {
-      const end = performance.now();
-      message.success(`生成1000条订单耗时：${(end - start).toFixed(2)}ms`);
-    }, 0);
-  };
-
   // Key策略切换功能
   const changeKeyStrategy = (strategy) => {
     setKeyStrategy(strategy);
@@ -369,6 +353,24 @@ const OrderProcessingCenter = () => {
     },
   ];
 
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      
+      const start = performance.now();
+      const newData = Array.from({ length: 1000 }, (_, idx) => generateMockOrder(idx));
+      setDisplayData(newData);
+      setTimeout(() => {
+        const end = performance.now();
+        message.success(`生成1000条订单耗时：${(end - start).toFixed(2)}ms`);
+      }, 0);
+    }
+    
+    return () => {
+      if (updateTimer) clearInterval(updateTimer);
+    };
+  }, []);
+  
   // 过滤数据
   const filteredData = orderStatus
     ? displayData.filter((order) => order.status === orderStatus)
@@ -522,4 +524,4 @@ const OrderProcessingCenter = () => {
   );
 };
 
-export default OrderProcessingCenter;  
+export default OrderProcessingCenter;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { QuestionCircleFilled,RightOutlined,DownOutlined } from '@ant-design/icons'
-import { fetchBooks, setBooks, selectAllBooks, selectBooksLoading, selectBooksError } from '../../store/booksSlice';
+import { fetchBooks, selectAllBooks, selectBooksLoading, selectBooksError } from '../../store/booksSlice';
 import * as XLSX from 'xlsx';
 import styles from './index.less';
 import { Button, message } from 'antd';
@@ -10,24 +10,40 @@ import { useNavigate } from 'react-router-dom';
 // 自定义Hook：用于跟踪DOM元素的创建和销毁
 const useDomTrack = () => {
   const stats = useRef({ created: 0, destroyed: 0 });
+  const listeners = useRef([]);
 
   const reset = useCallback(() => {
     stats.current = { created: 0, destroyed: 0 };
+    notifyListeners();
   }, []);
 
   const trackCreate = useCallback(() => {
     stats.current.created++;
+    notifyListeners();
   }, []);
 
   const trackDestroy = useCallback(() => {
     stats.current.destroyed++;
+    notifyListeners();
+  }, []);
+
+  const subscribe = useCallback((listener) => {
+    listeners.current.push(listener);
+    return () => {
+      listeners.current = listeners.current.filter(l => l !== listener);
+    };
+  }, []);
+
+  const notifyListeners = useCallback(() => {
+    listeners.current.forEach(listener => listener(stats.current));
   }, []);
 
   return {
     stats: stats.current,
     reset,
     trackCreate,
-    trackDestroy
+    trackDestroy,
+    subscribe
   };
 };
 
@@ -96,15 +112,27 @@ const BookList = () => {
   const [keyType, setKeyType] = useState('id');
   const [showAcademicTestList, setShowAcademicTestList] = useState(false);
   const [expandedBooks, setExpandedBooks] = useState({});
+  
+  // 新增：DOM统计状态
+  const [domStats, setDomStats] = useState({ created: 0, destroyed: 0 });
 
   // DOM跟踪统计
-  const { stats: domTrackStats, reset: resetDomStats } = useDomTrack();
+  const { stats: domTrackStats, reset: resetDomStats, subscribe } = useDomTrack();
 
   // 初始化
   useEffect(() => {
     dispatch(fetchBooks());
     generateBooks(10);
-  }, [dispatch]);
+    
+    // 订阅DOM统计变化
+    const unsubscribe = subscribe(newStats => {
+      setDomStats(newStats);
+    });
+    
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch, subscribe]);
 
   // 从Redux同步数据
   useEffect(() => {
@@ -116,10 +144,10 @@ const BookList = () => {
 
   // 计算复用率
   const reuseRate = () => {
-    const N = academicBooks.length;
+    const N = books.length;
     if (N === 0) return '0.00';
 
-    const reusedCount = N - domTrackStats.destroyed;
+    const reusedCount = N - domStats.destroyed;
     return ((reusedCount / N) * 100).toFixed(2);
   };
 
@@ -137,7 +165,6 @@ const BookList = () => {
       generateMockBook(i + 1)
     );
     setLocalBooks(newBooks);
-    dispatch(setBooks(newBooks));
   };
 
   // 生成学术测试图书
@@ -334,12 +361,12 @@ const BookList = () => {
   // 导出Excel
   const exportReuseStatsToExcel = () => {
     const currentTotalItems = books.length;
-    const currentReused = currentTotalItems - domTrackStats.destroyed;
+    const currentReused = currentTotalItems - domStats.destroyed;
 
     const stats = [{
-      created: domTrackStats.created,
+      created: domStats.created,
       reused: currentReused,
-      destroyed: domTrackStats.destroyed,
+      destroyed: domStats.destroyed,
       reuseRate: `${reuseRate()}%`,
       time: new Date().toLocaleString()
     }];
@@ -424,6 +451,9 @@ const BookList = () => {
     return <span className={classNames}>{status}</span>;
   };
 
+  // 计算DOM复用数
+  const reusedCount = books.length - domStats.destroyed;
+
   if (loading) return <div className={styles.loading}>加载中...</div>;
   if (error) return <div className={styles.error}>错误: {error}</div>;
 
@@ -441,15 +471,15 @@ const BookList = () => {
             </div>
             <div>
               <span>DOM创建数：</span>
-              <span style={{ color: "rgb(64, 158, 255)" }}>0</span>
+              <span style={{ color: "rgb(64, 158, 255)" }}>{domStats.created}</span>
             </div>
             <div>
               <span>DOM复用数：</span>
-              <span style={{ color: 'rgb(103, 194, 58)' }}>0</span>
+              <span style={{ color: 'rgb(103, 194, 58)' }}>{reusedCount}</span>
             </div>
             <div>
               <span>DOM销毁数：</span>
-              <span style={{ color: 'rgb(245, 108, 108)' }}>0</span>
+              <span style={{ color: 'rgb(245, 108, 108)' }}>{domStats.destroyed}</span>
             </div>
             <div>
               <span>DOM复用率：</span>
@@ -524,7 +554,7 @@ const BookList = () => {
         (renderTime && renderTime !== 0) && <div className={styles.reuseStats}>
           <div>本次渲染耗时：{`${renderTime ?? 0}ms`}</div>
           <div>
-            节点创建：{domTrackStats.created ?? 0}，销毁元素数：{domTrackStats.destroyed ?? 0}，当前列表项数：{books.length ?? 0}，复用率：{reuseRate()}%
+            节点创建：{domStats.created ?? 0}，销毁元素数：{domStats.destroyed ?? 0}，当前列表项数：{books.length ?? 0}，复用率：{reuseRate()}%
           </div>
         </div>
       }

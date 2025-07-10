@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Button, Alert, Row, Col, Card, Form, Tag, message, Space } from 'antd';
 import {
   PlusOutlined,
@@ -8,16 +8,106 @@ import {
   ClockCircleOutlined,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBooks, selectAllBooks,setBooks } from '../../store/booksSlice';
+import { fetchBooks, selectAllBooks } from '../../store/booksSlice';
 import * as XLSX from 'xlsx';
 import styles from './index.less';
+
+// 创建自定义钩子用于追踪DOM节点
+const useTrackDOMNodes = () => {
+  const createdNodes = useRef(0);
+  const reusedNodes = useRef(0);
+  const destroyedNodes = useRef(0);
+  
+  // 存储节点ID的映射
+  const nodeIdMap = useRef(new Map());
+  
+  // 初始化window.domTrackStats
+  useEffect(() => {
+    window.domTrackStats = {
+      created: 0,
+      reused: 0,
+      destroyed: 0
+    };
+    
+    return () => {
+      // 清理时重置
+      window.domTrackStats = {
+        created: 0,
+        reused: 0,
+        destroyed: 0
+      };
+    };
+  }, []);
+  
+  // 更新统计信息
+  const updateStats = () => {
+    window.domTrackStats = {
+      created: createdNodes.current,
+      reused: reusedNodes.current,
+      destroyed: destroyedNodes.current
+    };
+  };
+  
+  // 注册节点
+  const registerNode = (id) => {
+    if (nodeIdMap.current.has(id)) {
+      reusedNodes.current++;
+    } else {
+      createdNodes.current++;
+      nodeIdMap.current.set(id, true);
+    }
+    updateStats();
+  };
+  
+  // 注销节点
+  const unregisterNode = (id) => {
+    if (nodeIdMap.current.has(id)) {
+      destroyedNodes.current++;
+      nodeIdMap.current.delete(id);
+      updateStats();
+    }
+  };
+  
+  // 使用useCallback确保函数引用不变
+  const getStats = React.useCallback(() => ({
+    created: createdNodes.current,
+    reused: reusedNodes.current,
+    destroyed: destroyedNodes.current
+  }), []);
+  
+  return {
+    registerNode,
+    unregisterNode,
+    getStats
+  };
+};
+
+const AcademicBookItem = ({ book, index }) => {
+  return (
+    <Card className={styles['academic-book-item']}>
+      <div className={styles['book-header']}>
+        <h3>{book.title}</h3>
+        <Tag color="blue">{book.category}</Tag>
+      </div>
+      <div className={styles['book-meta']}>
+        <span>作者: {book.author}</span>
+        <span>出版日期: {book.publishDate}</span>
+        <span>ISBN: {book.isbn}</span>
+      </div>
+      <div className={styles['book-rating']}>
+        <span>评分: {book.rating}</span>
+        <span>价格: ¥{book.price}</span>
+      </div>
+      <div className={styles['book-description']}>{book.description}</div>
+    </Card>
+  );
+};
 
 const DynamicMediumList = () => {
   const dispatch = useDispatch();
   const books = useSelector(selectAllBooks);
+  const [bookAll,setBookAll]= useState(books)
   const [loading, setLoading] = useState(false);
-  const [editDialogVisible, setEditDialogVisible] = useState(false);
-  const [editingBook, setEditingBook] = useState(null);
   const [totalOperations, setTotalOperations] = useState(0);
   const [lastOperationTime, setLastOperationTime] = useState(0);
   const [renderTime, setRenderTime] = useState(null);
@@ -26,14 +116,23 @@ const DynamicMediumList = () => {
   const [domTrackStats, setDomTrackStats] = useState({ created: 0, destroyed: 0, reused: 0 });
   const [academicBooks, setAcademicBooks] = useState([]);
   const nextId = useRef(1);
-  const mountedRef = useRef(false);
-
+  const isInitialMount = useRef(true); 
+  
+  // 使用自定义钩子追踪DOM节点
+  const { registerNode, unregisterNode, getStats } = useTrackDOMNodes();
+  
+  // 监听DOM统计变化，使用useCallback避免循环
   useEffect(() => {
-    if (!mountedRef.current) {
-      mountedRef.current = true;
-      dispatch(fetchBooks());
-    }
-  }, [dispatch]);
+    const updateStats = () => {
+      setDomTrackStats(getStats());
+    };
+    
+    // 使用requestAnimationFrame优化性能
+    const id = requestAnimationFrame(updateStats);
+    
+    return () => cancelAnimationFrame(id);
+  }, [getStats]);
+
 
   const generateMockBook = () => {
     const realTitles = [
@@ -100,22 +199,21 @@ const DynamicMediumList = () => {
   const generateBooks = (count = 10) => {
     const startTime = performance.now();
     const newBooks = Array.from({ length: count }, () => generateBook());
-    dispatch(setBooks(newBooks));
+    setBookAll(newBooks);
     setTotalOperations(totalOperations + 1);
     setLastOperationTime((performance.now() - startTime).toFixed(2));
   };
 
-  const setBooks = (newBooks) => {
-    // 使用函数式更新确保获取最新状态
-    setBooks((prevBooks) => {
-      preciseMeasure(() => newBooks);
-      return newBooks;
-    });
-  };
+   useEffect(() => {
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+        generateBooks(3500);
+      }
+    }, []);
 
   const sortBooks = () => {
     const startTime = performance.now();
-    const sortedBooks = [...books].sort((a, b) => {
+    const sortedBooks = [...bookAll].sort((a, b) => {
       if (a.category !== b.category) {
         return a.category.localeCompare(b.category);
       }
@@ -124,55 +222,56 @@ const DynamicMediumList = () => {
       }
       return a.title.localeCompare(b.title);
     });
-    setBooks(sortedBooks);
+    setBookAll(sortedBooks);
+    // dispatch(setBooksAction(sortedBooks));
     setTotalOperations(totalOperations + 1);
     setLastOperationTime((performance.now() - startTime).toFixed(2));
   };
 
   const insertRandomBook = () => {
     const startTime = performance.now();
-    const randomIndex = Math.floor(Math.random() * (books.length + 1));
+    const randomIndex = Math.floor(Math.random() * (bookAll.length + 1));
     const newBook = generateBook();
-    const newBooks = [...books];
+    const newBooks = [...bookAll];
     newBooks.splice(randomIndex, 0, newBook);
-    setBooks(newBooks);
+    setBookAll(newBooks);
     setTotalOperations(totalOperations + 1);
     setLastOperationTime((performance.now() - startTime).toFixed(2));
   };
 
   const deleteRandomBook = () => {
-    if (books.length === 0) return;
+    if (bookAll.length === 0) return;
     const startTime = performance.now();
-    const randomIndex = Math.floor(Math.random() * books.length);
-    const newBooks = [...books];
+    const randomIndex = Math.floor(Math.random() * bookAll.length);
+    const newBooks = [...bookAll];
     newBooks.splice(randomIndex, 1);
-    setBooks(newBooks);
+    setBookAll(newBooks);
     setTotalOperations(totalOperations + 1);
     setLastOperationTime((performance.now() - startTime).toFixed(2));
   };
 
   const replaceAllBooks = () => {
     const startTime = performance.now();
-    const newBooks = Array.from({ length: books.length }, () => generateBook());
-    setBooks(newBooks);
+    const newBooks = Array.from({ length: bookAll.length }, () => generateBook());
+    setBookAll(newBooks);
     setTotalOperations(totalOperations + 1);
     setLastOperationTime((performance.now() - startTime).toFixed(2));
   };
 
   const addBook = () => {
     const newBook = generateBook();
-    setBooks([newBook, ...books]);
+    setBookAll([newBook, ...bookAll]);
     setTotalOperations(totalOperations + 1);
   };
 
   const removeBook = (bookId) => {
-    const newBooks = books.filter((book) => book.id !== bookId);
-    setBooks(newBooks);
+    const newBooks = bookAll.filter((book) => book.id !== bookId);
+    setBookAll(newBooks);
     setTotalOperations(totalOperations + 1);
   };
 
   const increaseStock = (bookId) => {
-    const newBooks = books.map((book) => {
+    const newBooks = bookAll.map((book) => {
       if (book.id === bookId) {
         const newStock = book.stock + 1;
         let newStatus = book.status;
@@ -185,14 +284,14 @@ const DynamicMediumList = () => {
       }
       return book;
     });
-    setBooks(newBooks);
+    setBookAll(newBooks);
     setTotalOperations(totalOperations + 1);
   };
 
   const decreaseStock = (bookId) => {
-    const book = books.find((book) => book.id === bookId);
+    const book = bookAll.find((book) => book.id === bookId);
     if (book && book.stock > 0) {
-      const newBooks = books.map((book) => {
+      const newBooks = bookAll.map((book) => {
         if (book.id === bookId) {
           const newStock = book.stock - 1;
           let newStatus = book.status;
@@ -205,7 +304,7 @@ const DynamicMediumList = () => {
         }
         return book;
       });
-      setBooks(newBooks);
+      setBookAll(newBooks);
       setTotalOperations(totalOperations + 1);
     }
   };
@@ -214,17 +313,21 @@ const DynamicMediumList = () => {
     setLoading(true);
     setTimeout(() => {
       const newBooks = Array.from({ length: 10 }).map(() => generateBook());
-      setBooks(newBooks);
+      setBookAll(newBooks);
       setLoading(false);
+      // 添加这一行来确保性能指标显示
+      setRenderTime('0');
     }, 500);
   };
 
   const clearStock = () => {
     setLoading(true);
     setTimeout(() => {
-      const newBooks = books.map((book) => ({ ...book, stock: 0 }));
-      setBooks(newBooks);
+      const newBooks = bookAll.map((book) => ({ ...book, stock: 0 }));
+      setBookAll(newBooks);
       setLoading(false);
+      // 添加这一行来确保性能指标显示
+      setRenderTime('0');
     }, 500);
   };
 
@@ -255,7 +358,7 @@ const DynamicMediumList = () => {
     performance.mark('start-render');
     
     const newBooks = updateFn();
-    setBooks(newBooks);
+    setBookAll(newBooks);
     
     requestAnimationFrame(() => {
       performance.mark('end-render');
@@ -269,8 +372,9 @@ const DynamicMediumList = () => {
 
   const generateAcademicBooks = (count) => {
     nextId.current = 1;
-    const newBooks = Array.from({ length: count }, () => generateMockBook());
-    setAcademicBooks(newBooks);
+     generateBooks(10000);
+    // 添加这一行来确保性能指标显示
+    setRenderTime('0');
   };
 
   const insertRandomAcademicBook = () => {
@@ -279,6 +383,8 @@ const DynamicMediumList = () => {
     const newBooks = [...academicBooks];
     newBooks.splice(randomIndex, 0, newBook);
     setAcademicBooks(newBooks);
+    // 添加这一行来确保性能指标显示
+    setRenderTime('0');
   };
 
   const deleteRandomAcademicBook = () => {
@@ -287,6 +393,8 @@ const DynamicMediumList = () => {
     const newBooks = [...academicBooks];
     newBooks.splice(randomIndex, 1);
     setAcademicBooks(newBooks);
+    // 添加这一行来确保性能指标显示
+    setRenderTime('0');
   };
 
   const shuffleAcademicBooks = () => {
@@ -296,17 +404,23 @@ const DynamicMediumList = () => {
       [newBooks[i], newBooks[j]] = [newBooks[j], newBooks[i]];
     }
     setAcademicBooks(newBooks);
+    // 添加这一行来确保性能指标显示
+    setRenderTime('0');
   };
 
   const replaceAllAcademicBooks = () => {
     const len = academicBooks.length > 0 ? academicBooks.length : 100;
     const newBooks = Array.from({ length: len }, () => generateMockBook());
     setAcademicBooks(newBooks);
+    // 添加这一行来确保性能指标显示
+    setRenderTime('0');
   };
 
   const appendToEndAcademicBook = () => {
     const newBook = generateMockBook();
     setAcademicBooks([...academicBooks, newBook]);
+    // 添加这一行来确保性能指标显示
+    setRenderTime('0');
   };
 
   const insertToMiddleAcademicBook = () => {
@@ -315,6 +429,8 @@ const DynamicMediumList = () => {
     const newBooks = [...academicBooks];
     newBooks.splice(mid, 0, newBook);
     setAcademicBooks(newBooks);
+    // 添加这一行来确保性能指标显示
+    setRenderTime('0');
   };
 
   const partialUpdateAcademicBook = () => {
@@ -323,6 +439,8 @@ const DynamicMediumList = () => {
     const newBooks = [...academicBooks];
     newBooks[idx] = { ...newBooks[idx], title: newBooks[idx].title + '_更新' };
     setAcademicBooks(newBooks);
+    // 添加这一行来确保性能指标显示
+    setRenderTime('0');
   };
 
   const measureOperation = async (operationFn) => {
@@ -525,7 +643,10 @@ const DynamicMediumList = () => {
     message.success('统计数据已导出为Excel！');
   };
 
-  const totalStock = books.reduce((sum, book) => sum + book.stock, 0);
+  const totalStock = useMemo(()=>{
+   return bookAll.reduce((sum, book) => sum + book?.stock||0, 0)
+  },[bookAll]);
+
   const reuseRate = () => {
     const N = academicBooks.length;
     if (N === 0) return '0.00';
@@ -542,16 +663,16 @@ const DynamicMediumList = () => {
             <h2>图书目录</h2>
           </div>
           <div className={styles['right-section']}>
-            <Button type="success" onClick={sortBooks} className={styles['btn-sort']}>
-              大论顺序
+            <Button style={{background:'#67C23A',color:'#fff'}} onClick={sortBooks} >
+              打乱顺序
             </Button>
-            <Button type="warning" onClick={insertRandomBook} className={styles['btn-insert']}>
+            <Button style={{background:'#E6A23C',color:'#fff'}} onClick={insertRandomBook} >
               插入随机图书
             </Button>
-            <Button type="danger" onClick={deleteRandomBook} className={styles['btn-delete']}>
+            <Button style={{background:'#F56C6C',color:'#fff'}} onClick={deleteRandomBook} >
               删除随机图书
             </Button>
-            <Button type="info" onClick={replaceAllBooks} className={styles['btn-replace']}>
+            <Button style={{background:'#909399',color:'#fff'}} onClick={replaceAllBooks} >
               替换所有图书
             </Button>
           </div>
@@ -562,7 +683,7 @@ const DynamicMediumList = () => {
         <Alert
           message="模块说明"
           type="info"
-          description="库存管理系统用于实时跟踪图书馆图书的库存变化。支持入库、出库、调拨等操作，采用Vue.js Key绑定策略优化动态数据更新的性能表现。"
+          description="库存管理系统用于实时跟踪图书馆图书的库存变化。支持入库、出库、调拨等操作，采用React Key绑定策略优化动态数据更新的性能表现。"
           closable={false}
           showIcon
         />
@@ -576,7 +697,7 @@ const DynamicMediumList = () => {
                 <ClockCircleOutlined />
               </div>
               <div className={styles['status-info']}>
-                <h3>{books.length}</h3>
+                <h3>{bookAll.length}</h3>
                 <p>总图书数</p>
               </div>
             </Card>
@@ -598,7 +719,7 @@ const DynamicMediumList = () => {
                 <BoxPlotOutlined />
               </div>
               <div className={styles['status-info']}>
-                <h3>{totalStock}</h3>
+                <h3>{totalStock??0}</h3>
                 <p>总库存</p>
               </div>
             </Card>
@@ -736,27 +857,21 @@ const DynamicMediumList = () => {
         </div>
       </div>
 
-      <div className={styles['render-details']} style={{ display: renderTime ? 'block' : 'none' }}>
-        本次渲染耗时：{renderTime} ms<br />
-        节点创建：{domTrackStats.created}，复用：{domTrackStats.reused}，销毁：{domTrackStats.destroyed}，复用率：{reuseRate()}%
+      <div className={styles['render-details']} style={{ display: 'block' }}>
+        本次渲染耗时：{renderTime || '0'} ms<br />
+        节点创建：{domTrackStats.created || 0}，复用：{domTrackStats.reused || 0}，销毁：{domTrackStats.destroyed || 0}，复用率：{reuseRate()}%
       </div>
 
       <div className={styles['academic-test-list']}>
         {showAcademicTestList && academicBooks.map((book, index) => (
-          <span
-            key={keyType === 'id' ? book.id : index}
-            data-id={book.id}
-            className={styles['academic-item']}
-          >
-            {book.title}
-          </span>
+          <AcademicBookItem key={keyType === 'id' ? book.id : index} book={book} index={index} />
         ))}
       </div>
 
       <div className={styles['book-list']}>
-        {books.length > 0 ? (
+        {bookAll.length > 0 ? (
           <div className={styles['list-container']}>
-            {books.map((book) => (
+            {bookAll.map((book) => (
               <div key={book.id} className={styles['book-item']}>
                 <div className={styles['book-cover']} style={{ backgroundColor: book.coverColor }}>
                   <ClockCircleOutlined />
@@ -816,4 +931,4 @@ const DynamicMediumList = () => {
   );
 };
 
-export default DynamicMediumList;  
+export default DynamicMediumList;    
